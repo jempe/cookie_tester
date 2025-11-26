@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -18,6 +19,9 @@ type CookieData struct {
 }
 
 func main() {
+	port := flag.Int("port", 8080, "Port for the web server")
+	flag.Parse()
+
 	tmpl := template.Must(template.ParseFiles("templates/index.html"))
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -48,15 +52,22 @@ func main() {
 		tmpl.Execute(w, cookieData)
 	})
 
-	fmt.Println("Server starting on http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+	addr := fmt.Sprintf(":%d", *port)
+
+	fmt.Printf("Server starting on http://localhost%s\n", addr)
+	http.ListenAndServe(addr, nil)
 }
 
 func setCookieIfNotExists(w http.ResponseWriter, name, value string, httpOnly, secure bool, sameSite http.SameSite, path string) {
+
+	expireTime := time.Now().Add(365 * 24 * time.Hour)
+
+	readableExpireTime := expireTime.Format("2006-01-02 15:04:05")
+
 	http.SetCookie(w, &http.Cookie{
 		Name:     name,
-		Value:    value,
-		Expires:  time.Now().Add(365 * 24 * time.Hour), // 1 year
+		Value:    value + " | expires: " + readableExpireTime,
+		Expires:  expireTime,
 		HttpOnly: httpOnly,
 		Secure:   secure,
 		SameSite: sameSite,
