@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cookie Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .http-only {
+            color: #4CAF50;
+        }
+        .secure {
+            color: #2196F3;
+        }
+        .cookie-value {
+            max-width: 400px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-family: monospace;
+        }
+        .cookie-name {
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #333;
+            font-family: monospace;
+        }
+
+        @media (max-width: 768px) {
+            .cookie-name {
+                width: 100px;
+            }
+            .cookie-value {
+                width: calc(100vw - 140px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Cookie Tester</h1>
+    <p>This page sets various cookies with different attributes. Refresh to see them below.</p>
+    
+    <div class="cookie-table">
+        <h2>Current Cookies</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .}}
+                <tr>
+                    <td class="cookie-name">{{.Name}}</td>
+                    <td class="cookie-value">{{.Value}}</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="instructions" style="margin-top: 30px;">
+        <h2>How to Test</h2>
+        <ol>
+            <li>Open Developer Tools (F12)</li>
+            <li>Go to the Application tab</li>
+            <li>Click on Cookies in the left sidebar</li>
+            <li>Select the current domain</li>
+            <li>Inspect the cookies and their properties</li>
+            <li>Try accessing cookies via JavaScript in the Console (HttpOnly cookies won't be accessible)</li>
+        </ol>
+    </div>
+</body>
+</html>
